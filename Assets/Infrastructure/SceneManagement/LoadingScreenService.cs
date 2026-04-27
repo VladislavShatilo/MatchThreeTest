@@ -11,6 +11,8 @@ public class LoadingScreenService : ILoadingScreenService
     private ILoadingScreenView loadingScreenView;
     private ILoadingScreenFactory loadingScreenFactory;
 
+    private bool isInitialized;
+
 
     [Inject]
     private void Construct( ILoadingScreenFactory loadingScreenFactory)
@@ -18,23 +20,25 @@ public class LoadingScreenService : ILoadingScreenService
         this.loadingScreenFactory = loadingScreenFactory ?? throw new ArgumentNullException(nameof(loadingScreenFactory));
 
     }
-    public async UniTask Init(CancellationToken token)
+    public async UniTask Initialize(CancellationToken token)
     {
+        if (isInitialized) return;
+
         var go = await loadingScreenFactory.Create(token);
         loadingScreenView = go.GetComponent<ILoadingScreenView>();
-    }
-    public async UniTask Show( CancellationToken token)
-    {
 
-        loadingScreenView.Show();
-        await UniTask.Yield(token);
+        isInitialized = true;
+    }
+
+
+    public async UniTask Show(CancellationToken token)
+    {
+        await loadingScreenView.Show(token);
     }
 
     public async UniTask Hide(CancellationToken token)
     {
-        loadingScreenView.Hide();
-
-        await UniTask.Yield(token);
+        await loadingScreenView.Hide(token);
     }
 
 }

@@ -3,7 +3,7 @@ using System.Threading;
 
 public interface ILoadingScreenService
 {
-    UniTask Init(CancellationToken token);
+    UniTask Initialize(CancellationToken token);
 
     UniTask Show(CancellationToken token);
     UniTask Hide( CancellationToken token);

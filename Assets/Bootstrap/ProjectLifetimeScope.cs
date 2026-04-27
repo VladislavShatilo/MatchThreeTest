@@ -30,8 +30,12 @@ public class ProjectLifetimeScope : LifetimeScope
 
         builder.Register<LoadingScreenService>(Lifetime.Singleton)
                 .As<ILoadingScreenService>();
+        builder.Register<ILoadMetaSceneUseCase, LoadMetaSceneUseCase>(Lifetime.Scoped);
+        builder.Register<ILoadCoreSceneUseCase, LoadCoreSceneUseCase>(Lifetime.Scoped);
 
 
-        
+
+
+
     }
 }

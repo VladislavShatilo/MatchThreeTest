@@ -1,15 +1,14 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
-using UnityEngine;
 using VContainer;
 
 public class SceneTransitionService
 {
     private ISceneLoader sceneLoader;
     private ILoadingScreenService loadingScreenService;
+
+    private bool isTransitioning;
 
     [Inject]
     private void Construct(ISceneLoader sceneLoader, ILoadingScreenService loadingScreenService)
@@ -20,11 +19,28 @@ public class SceneTransitionService
 
     public async UniTask LoadScene(string sceneKey, CancellationToken token)
     {
-        await loadingScreenService.Init(token);
+        if (isTransitioning)
+            throw new InvalidOperationException("Transition already in progress");
 
-        await loadingScreenService.Show(token);
+        isTransitioning = true;
 
-        await sceneLoader.LoadScene(sceneKey, token);
-        
+        try
+        {
+            await loadingScreenService.Initialize(CancellationToken.None);
+
+            await loadingScreenService.Show(CancellationToken.None);
+
+            await UniTask.Yield(PlayerLoopTiming.Update);
+
+            await sceneLoader.LoadScene(sceneKey, CancellationToken.None);
+
+            await UniTask.Yield(PlayerLoopTiming.Update);
+
+            await loadingScreenService.Hide(CancellationToken.None);
+        }
+        finally
+        {
+            isTransitioning = false;
+        }
     }
 }

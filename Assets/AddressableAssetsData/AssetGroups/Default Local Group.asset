@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 344a3316b9bc6a14f9e5a55d6f986d02
   m_SerializeEntries:
+  - m_GUID: 69683b74a3df8434395d841d3c10d634
+    m_Address: MetaScene
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8303fd720bd36f04cbcb4fe41177afe2
     m_Address: CoreScene
     m_ReadOnly: 0
