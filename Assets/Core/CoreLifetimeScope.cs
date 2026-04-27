@@ -10,8 +10,15 @@ public class CoreLifetimeScope : LifetimeScope
 
     private void RegisterServices(IContainerBuilder builder)
     {
+        builder.RegisterEntryPoint<CoreEntryPoint>();
 
         builder.RegisterComponentInHierarchy<LoadMetaButtonView>();
+
+        builder.Register<TileFactory>(Lifetime.Singleton)
+           .As<ITileFactory>();
+
+        builder.Register<GridService>(Lifetime.Singleton)
+          .As<IGridService>();
 
 
     }

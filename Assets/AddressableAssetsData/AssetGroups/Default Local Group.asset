@@ -17,8 +17,28 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 344a3316b9bc6a14f9e5a55d6f986d02
   m_SerializeEntries:
+  - m_GUID: 08ec5d4ab326475479681574ea987cad
+    m_Address: Tile_Banana
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 43825f2910dc80e4191d0d54e96e9255
+    m_Address: Tile_Apple
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d849546f22a43641840b8c94753b6dc
+    m_Address: Tile_Grape
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 69683b74a3df8434395d841d3c10d634
     m_Address: MetaScene
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 794853b815d8e764196aee6547b2eaac
+    m_Address: Tile_Blueberry
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
