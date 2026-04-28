@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public sealed class GridModel
 {
     private readonly Cell[,] cells;
@@ -18,4 +20,7 @@ public sealed class GridModel
     }
 
     public Cell Get(int x, int y) => cells[x, y];
+
+   
+   
 }

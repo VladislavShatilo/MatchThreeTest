@@ -1,24 +1,31 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine.AddressableAssets;
+using VContainer;
 
 public class TileFactory : ITileFactory
 {
-    private readonly Dictionary<TileType, string> addressMap = new()
-    {
-        { TileType.Apple, "Tile_Apple" },
-        { TileType.Banana, "Tile_Banana" },
-        { TileType.Blueberry, "Tile_Blueberry" },
-        { TileType.Grape, "Tile_Grape" }
-    };
+    private TileDatabase database;
+    private Dictionary<TileType, AssetReferenceGameObject> map;
 
-    public async UniTask<GameObject> Create(TileType type)
-    {
-        var address = addressMap[type];
-        var handle = Addressables.LoadAssetAsync<GameObject>(address);
-        var prefab = await handle.ToUniTask();
 
-        return Object.Instantiate(prefab);
+    [Inject]
+    private void Construct(TileDatabase database)
+    {
+        this.database = database;
+        map = database.Tiles.ToDictionary(x => x.Type, x => x.Prefab);
+
+    }
+
+    public async UniTask<CellView> Create(TileType type)
+    {
+        if (!map.TryGetValue(type, out var prefab))
+            throw new Exception($"No prefab for {type}");
+
+        var obj = await prefab.InstantiateAsync().ToUniTask();
+        return obj.GetComponent<CellView>();
     }
 }

@@ -1,30 +1,12 @@
-using System;
 using UnityEngine;
 
 public class GridService : IGridService
 {
     public GridModel Grid { get; private set; }
 
-    private readonly TileType[] AllTiles = (TileType[])Enum.GetValues(typeof(TileType));
-    private readonly System.Random random = new System.Random();
-
-    public void Initialize(int width, int height)
+    public void Initialize(GridModel grid)
     {
-        Grid = new GridModel(width, height);
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                Grid.Set(x, y, new Cell(x, y, GetRandomTile()));
-            }
-        }
-    }
-
-    public bool CanSwap(Vector2Int from, Vector2Int to)
-    {
-        return GridRules.IsValidPosition(from, Grid.Width,Grid.Height) &&
-               GridRules.IsValidPosition(to, Grid.Width, Grid.Height);
+        Grid = grid;
     }
 
     public void Swap(Vector2Int a, Vector2Int b)
@@ -35,8 +17,10 @@ public class GridService : IGridService
         Grid.Set(b.x, b.y, temp);
     }
 
-    private TileType GetRandomTile()
+    public bool CanSwap(Vector2Int a, Vector2Int b)
     {
-        return AllTiles[random.Next(AllTiles.Length)];
+        return GridRules.IsNeighbor(a, b) &&
+               GridRules.IsValidPosition(a, Grid.Width, Grid.Height) &&
+               GridRules.IsValidPosition(b, Grid.Width, Grid.Height);
     }
 }

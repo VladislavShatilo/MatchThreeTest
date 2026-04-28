@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITileFactory 
+public interface ITileFactory
 {
-    UniTask<GameObject> Create(TileType type);
+    UniTask<CellView> Create(TileType tileType);
 }

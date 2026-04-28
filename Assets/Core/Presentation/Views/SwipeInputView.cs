@@ -38,7 +38,9 @@ public class SwipeInputView : MonoBehaviour
             if (!gridRaycaster.TryGetCellView(Input.mousePosition, out var cellView))
                 return;
 
-            startCell = gridView.GetGridPosition(cellView);
+            if (!gridView.TryGetGridPosition(cellView, out startCell))
+                return;
+
             startPointerPos = Input.mousePosition; 
             dragging = true;
         }

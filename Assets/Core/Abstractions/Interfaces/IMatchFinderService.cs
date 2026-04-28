@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface IMatchFinderService
 {
-    IReadOnlyList<Match> FindMatches(GridModel Grid);
+    public List<MatchGroup> FindMatches(GridSnapshot grid);
 }

@@ -11,8 +11,8 @@ public class ProjectLifetimeScope : LifetimeScope
 
     private void RegisterServices(IContainerBuilder builder)
     {
-        builder.Register<EventBus>(Lifetime.Singleton)
-           .As<IEventBus>();
+        builder.Register<EventBus>(Lifetime.Singleton).As<IEventBus>();
+        builder.Register<EventAwaiter>(Lifetime.Singleton).As<IEventAwaiter>();
 
         builder.Register<GameStateRepository>(Lifetime.Singleton)
                .As<IGameStateRepository>();

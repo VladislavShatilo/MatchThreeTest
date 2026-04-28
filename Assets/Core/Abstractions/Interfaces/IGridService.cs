@@ -6,7 +6,7 @@ public interface IGridService
 {
     GridModel Grid { get; }
 
-    void Initialize(int width, int height);
+    void Initialize(GridModel grid);
 
     void Swap(Vector2Int a, Vector2Int b);
 

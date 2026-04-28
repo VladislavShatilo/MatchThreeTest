@@ -4,10 +4,8 @@ using System.Threading;
 
 public interface IEventBus
 {
-    void Subscribe<TEvent>(Action<TEvent> handler);
-    void Unsubscribe<TEvent>(Action<TEvent> handler);
-    void Publish<TEvent>(TEvent eventData);
-
-    UniTask WaitFor<T>(CancellationToken ct);
+    void Subscribe<T>(Action<T> handler);
+    void Unsubscribe<T>(Action<T> handler);
+    void Publish<T>(T evt);
 
 }
