@@ -677,7 +677,8 @@ MonoBehaviour:
   parentReference:
     TypeName: ProjectLifetimeScope
   autoRun: 1
-  autoInjectGameObjects: []
+  autoInjectGameObjects:
+  - {fileID: 1172611951}
 --- !u!4 &1482962000
 Transform:
   m_ObjectHideFlags: 0

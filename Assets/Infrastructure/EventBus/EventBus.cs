@@ -1,11 +1,13 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class EventBus : IEventBus
 {
     private readonly Dictionary<Type, List<Delegate>> eventHandlers = new();
-
+    private readonly Dictionary<Type, List<UniTaskCompletionSource>> awaiters = new();
     public void Subscribe<TEvent>(Action<TEvent> handler)
     {
         if (handler == null)
@@ -38,32 +40,50 @@ public class EventBus : IEventBus
         if (handlers.Count == 0)
             eventHandlers.Remove(type);
     }
-
-    public void Publish<TEvent>(TEvent eventData)
+    public UniTask WaitFor<T>(CancellationToken ct)
     {
-        if (eventData == null)
+        var type = typeof(T);
+        var tcs = new UniTaskCompletionSource();
+
+        if (!awaiters.TryGetValue(type, out var list))
         {
-            Debug.LogWarning($"EventBus: try to publish null event ({typeof(TEvent).Name}).");
-            return;
+            list = new List<UniTaskCompletionSource>();
+            awaiters[type] = list;
         }
 
-        var type = typeof(TEvent);
+        list.Add(tcs);
 
-        if (!eventHandlers.TryGetValue(type, out var handlers) || handlers.Count == 0)
-            return;
-
-        var handlersCopy = new List<Delegate>(handlers);
-
-        foreach (var handler in handlersCopy)
+        ct.Register(() =>
         {
-            try
+            list.Remove(tcs);
+            tcs.TrySetCanceled();
+        });
+
+        return tcs.Task;
+    }
+
+    public void Publish<T>(T eventData)
+    {
+        var type = typeof(T);
+
+        // обычные подписчики
+        if (eventHandlers.TryGetValue(type, out var handlers))
+        {
+            foreach (var handler in new List<Delegate>(handlers))
             {
-                ((Action<TEvent>)handler)?.Invoke(eventData);
+                ((Action<T>)handler)?.Invoke(eventData);
             }
-            catch (Exception ex)
+        }
+
+        // awaiters
+        if (awaiters.TryGetValue(type, out var waiters))
+        {
+            foreach (var waiter in waiters)
             {
-                Debug.LogError($"EventBus: error in handler {type.Name}: {ex}");
+                waiter.TrySetResult();
             }
+
+            waiters.Clear();
         }
     }
 

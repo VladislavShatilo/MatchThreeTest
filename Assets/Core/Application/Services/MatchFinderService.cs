@@ -1,0 +1,12 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using UnityEngine;
+
+public class MatchFinderService : IMatchFinderService
+{
+    public IReadOnlyList<Match> FindMatches(GridModel Grid)
+    {
+        return null;
+    }
+}
