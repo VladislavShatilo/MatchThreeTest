@@ -16,6 +16,7 @@ public class LoadCoreSceneUseCase : ILoadCoreSceneUseCase
     }
     public async UniTask Execute(CancellationToken token)
     {
+        Debug.Log("LoadCoreSceneUseCase");
         await sceneTransitionService.LoadScene("CoreScene", token);
     }
 }

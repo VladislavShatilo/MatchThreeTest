@@ -36,6 +36,7 @@ public class CoreLifetimeScope : LifetimeScope
         builder.RegisterInstance(raycaster);
         builder.RegisterInstance(eventSystem);
         builder.RegisterComponentInHierarchy<GridView>();
+        builder.RegisterComponentInHierarchy<EnergyView>();
 
         builder.Register<GridRaycaster>(Lifetime.Singleton).As<IGridRaycaster>();
         
@@ -49,5 +50,8 @@ public class CoreLifetimeScope : LifetimeScope
         builder.Register<GridFactory>(Lifetime.Singleton).As<IGridFactory>();
         builder.Register<ITileFactory, TileFactory>(Lifetime.Singleton);
         builder.RegisterInstance(tileDatabase);
+        builder.Register<EnergyGainSystem>(Lifetime.Singleton).As<IEnergyGainSystem>();
+
+        
     }
 }

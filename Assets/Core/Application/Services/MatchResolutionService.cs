@@ -13,16 +13,19 @@ public class MatchResolutionService : IMatchResolutionService
     private IEventBus eventBus;
     private IEventAwaiter eventAwaiter;
     private ITileTypeGenerator tileTypeGenerator;
+    private IEnergyGainSystem energyGainSystem;
+
 
     [Inject]
     private void Construct(IMatchFinderService matchFinder, IGridService gridService, IEventBus eventBus,
-        ITileTypeGenerator tileTypeGenerator, IEventAwaiter eventAwaiter)
+        ITileTypeGenerator tileTypeGenerator, IEventAwaiter eventAwaiter, IEnergyGainSystem energyGainSystem)
     {
         this.matchFinder = matchFinder ?? throw new ArgumentNullException(nameof(matchFinder));
         this.gridService = gridService ?? throw new ArgumentNullException(nameof(gridService));
         this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         this.eventAwaiter = eventAwaiter ?? throw new ArgumentNullException(nameof(eventAwaiter));
         this.tileTypeGenerator = tileTypeGenerator ?? throw new ArgumentNullException(nameof(tileTypeGenerator));
+        this.energyGainSystem = energyGainSystem ?? throw new ArgumentNullException(nameof(energyGainSystem));
     }
 
     public async UniTask Resolve(GridModel grid, CancellationToken ct)
@@ -33,51 +36,53 @@ public class MatchResolutionService : IMatchResolutionService
         isResolving = true;
         try
         {
-        while (true)
-        {
-            var snapshot = new GridSnapshot(grid);
-
-            var matches = matchFinder.FindMatches(snapshot);
-
-            if (matches.Count == 0)
-                break;
-
-            var plan = new ResolutionStepPlan
+            while (true)
             {
-                RemovedCells = ExtractCells(matches)
-            };
-            var simulatedGrid = BuildWorkingGrid(snapshot, plan.RemovedCells);
-            BuildGravityPlan(simulatedGrid, plan);
-            BuildSpawnPlan(simulatedGrid, plan);
+                var snapshot = new GridSnapshot(grid);
 
-            var removeAnimationCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
-                e => e.Phase == GridAnimationPhase.Remove, ct);
-            eventBus.Publish(new ResolutionPlanCreatedEvent(plan));
+                var matches = matchFinder.FindMatches(snapshot);
 
-            await removeAnimationCompleted;
-            ApplyRemovedToModel(grid, plan);
-            eventBus.Publish(new GridStepAppliedEvent(GridAnimationPhase.Remove));
+                if (matches.Count == 0)
+                    break;
+                foreach (var match in matches)
+                {
+                    energyGainSystem.OnMatch(match.Cells.Count);
+                }
+                var plan = new ResolutionStepPlan
+                {
+                    RemovedCells = ExtractCells(matches)
+                };
+                var simulatedGrid = BuildWorkingGrid(snapshot, plan.RemovedCells);
+                BuildGravityPlan(simulatedGrid, plan);
+                BuildSpawnPlan(simulatedGrid, plan);
 
-            var gravityAnimationCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
-                e => e.Phase == GridAnimationPhase.Gravity, ct);
-            await gravityAnimationCompleted;
-            ApplyGravityToModel(grid, plan);
-            eventBus.Publish(new GridStepAppliedEvent(GridAnimationPhase.Gravity));
+                var removeAnimationCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
+                    e => e.Phase == GridAnimationPhase.Remove, ct);
+                eventBus.Publish(new ResolutionPlanCreatedEvent(plan));
 
-            var refillAnimationCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
-                e => e.Phase == GridAnimationPhase.Refill, ct);
-            await refillAnimationCompleted;
-            ApplySpawnToModel(grid, plan);
-            eventBus.Publish(new GridStepAppliedEvent(GridAnimationPhase.Refill));
+                await removeAnimationCompleted;
+                ApplyRemovedToModel(grid, plan);
+                eventBus.Publish(new GridStepAppliedEvent(GridAnimationPhase.Remove));
 
-            var stepCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
-                e => e.Phase == GridAnimationPhase.StepCompleted, ct);
-            await stepCompleted;
+                var gravityAnimationCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
+                    e => e.Phase == GridAnimationPhase.Gravity, ct);
+                await gravityAnimationCompleted;
+                ApplyGravityToModel(grid, plan);
+                eventBus.Publish(new GridStepAppliedEvent(GridAnimationPhase.Gravity));
 
-            await UniTask.Delay(40, cancellationToken: ct);
-            await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate, ct);
-        }
+                var refillAnimationCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
+                    e => e.Phase == GridAnimationPhase.Refill, ct);
+                await refillAnimationCompleted;
+                ApplySpawnToModel(grid, plan);
+                eventBus.Publish(new GridStepAppliedEvent(GridAnimationPhase.Refill));
 
+                var stepCompleted = eventAwaiter.WaitAsync<GridAnimationCompletedEvent>(
+                    e => e.Phase == GridAnimationPhase.StepCompleted, ct);
+                await stepCompleted;
+
+                await UniTask.Delay(40, cancellationToken: ct);
+                await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate, ct);
+            }
         }
         finally
         {
@@ -227,5 +232,4 @@ public class MatchResolutionService : IMatchResolutionService
             grid.Set(spawn.To.x, spawn.To.y, cell);
         }
     }
-
 }

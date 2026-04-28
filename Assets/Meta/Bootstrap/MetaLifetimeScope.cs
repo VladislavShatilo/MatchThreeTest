@@ -10,8 +10,8 @@ public class MetaLifetimeScope : LifetimeScope
 
     private void RegisterServices(IContainerBuilder builder)
     {
-
         builder.RegisterComponentInHierarchy<LoadCoreButtonView>();
+        builder.RegisterComponentInHierarchy<MetaEnergyView>();
 
 
     }

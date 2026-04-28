@@ -19,14 +19,16 @@ public class LoadCoreButtonView : MonoBehaviour
     {
         this.useCase = useCase ?? throw new ArgumentNullException(nameof(useCase));
     }
-    private void Awake()
+
+    private void Start()
     {
         destroyToken = this.GetCancellationTokenOnDestroy();
-
         button.onClick.AddListener(OnClick);
     }
+
     private void OnClick()
     {
+
         Execute().Forget();
     }
 
