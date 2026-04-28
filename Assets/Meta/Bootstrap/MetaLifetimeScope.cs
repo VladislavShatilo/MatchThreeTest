@@ -12,6 +12,7 @@ public class MetaLifetimeScope : LifetimeScope
     {
         builder.RegisterComponentInHierarchy<LoadCoreButtonView>();
         builder.RegisterComponentInHierarchy<MetaEnergyView>();
+        builder.RegisterComponentInHierarchy<TreeView>();
 
 
     }

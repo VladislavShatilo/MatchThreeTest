@@ -3,5 +3,7 @@ public enum TileType
     Apple,
     Banana,
     Blueberry,
-    Grape
+    Grape,
+    Orange,
+    Pear
 }

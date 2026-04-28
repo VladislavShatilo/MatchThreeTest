@@ -19,6 +19,7 @@ public class EnergyView : MonoBehaviour
 
     private void Start()
     {
+        energyText.text = energyService.NatureEnergy.ToString();
         subscription = energyService.NatureEnergy.Subscribe(UpdateView);
     }
 
