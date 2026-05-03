@@ -768,74 +768,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetRenderer: {fileID: 1102387072}
   maxEnergy: 500
---- !u!1 &1112766684
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1112766687}
-  - component: {fileID: 1112766686}
-  - component: {fileID: 1112766685}
-  m_Layer: 0
-  m_Name: EventSystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1112766685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112766684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_HorizontalAxis: Horizontal
-  m_VerticalAxis: Vertical
-  m_SubmitButton: Submit
-  m_CancelButton: Cancel
-  m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
---- !u!114 &1112766686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112766684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
---- !u!4 &1112766687
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112766684}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1156195659
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,7 +898,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1172334216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c5a8c29399442a47a90fb5889f6f129, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a9b17ef49957324b8dc7cd9e5a25cd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   energyText: {fileID: 408427351}
@@ -1138,6 +1070,7 @@ MonoBehaviour:
     TypeName: ProjectLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
+  renderer: {fileID: 1102387072}
 --- !u!4 &1482962000
 Transform:
   m_ObjectHideFlags: 0
@@ -1474,6 +1407,5 @@ SceneRoots:
   - {fileID: 1156195662}
   - {fileID: 222843106}
   - {fileID: 1615060122}
-  - {fileID: 1112766687}
   - {fileID: 1037912389}
   - {fileID: 1102387070}

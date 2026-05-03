@@ -1,0 +1,22 @@
+{
+    "name": "Scripts",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "UniTask",
+        "UniTask.Addressables",
+        "UniTask.DOTween",
+        "Unity.TextMeshPro",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
